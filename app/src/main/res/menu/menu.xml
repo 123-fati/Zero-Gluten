@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="search"
+        android:icon="@drawable/ic_search"
+        android:id="@+id/search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
+
+    <item
+        android:title="Arabe"
+        android:icon="@drawable/morocco"
+        android:id="@+id/arabe"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:title="Français"
+        android:icon="@drawable/france"
+        android:id="@+id/français"
+        app:showAsAction="never"
+        />
+    <item
+        android:title="Anglais"
+        android:icon="@drawable/usa"
+        android:id="@+id/anglais"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:title="Categories"
+        android:titleCondensed="Categories"
+        android:id="@+id/categorie"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:title="Tous"
+                android:id="@+id/tous"
+                app:showAsAction="never"
+                />
+            <item
+                android:title="Pharmacie"
+                android:id="@+id/pharmacy"
+                app:showAsAction="never"
+                />
+            <item
+                android:title="Alimentaire"
+                android:id="@+id/alimentary"
+                app:showAsAction="never"
+                />
+        </menu>
+    </item>
+
+
+
+</menu>

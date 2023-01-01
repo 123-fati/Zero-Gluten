@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ZeroGluten</string>
+
+    <string-array name="categories">
+        <item>
+            Pharmacy
+        </item>
+        <item>
+            Alimentary
+        </item>
+    </string-array>
+</resources>
