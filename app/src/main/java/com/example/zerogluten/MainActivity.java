@@ -2,6 +2,7 @@ package com.example.zerogluten;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,12 +23,16 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    SearchView searchView;
     FloatingActionButton add_button;
+    Button search_button;
+    EditText search_input;
+
+
 
     MyDbHelper myDB;
     ArrayList<String> product_id, product_name, product_description, product_price, product_poid, product_category;
@@ -48,7 +56,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        search_input= findViewById(R.id.search_input);
+
+        search_button = findViewById(R.id.search_button);
+
         myDB = new MyDbHelper(MainActivity.this);
+
+        search_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                product_id = new ArrayList<>();
+                product_name = new ArrayList<>();
+                product_description = new ArrayList<>();
+                product_price = new ArrayList<>();
+                product_poid = new ArrayList<>();
+                product_category = new ArrayList<>();
+
+                storeSearchDataInArrays(search_input.getText().toString().trim());
+
+
+                customAdapter = new CustomAdapter(MainActivity.this, MainActivity.this, product_id, product_name, product_description, product_price, product_poid,
+                        product_category);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            }
+        });
+
+
         product_id = new ArrayList<>();
         product_name = new ArrayList<>();
         product_description = new ArrayList<>();
@@ -62,15 +96,18 @@ public class MainActivity extends AppCompatActivity {
                 product_category);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -86,16 +123,85 @@ public class MainActivity extends AppCompatActivity {
             case R.id.anglais:
                 Toast.makeText(this, "anglais selected", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.pharmacy:
+                Toast.makeText(this, "pharmacy category selected", Toast.LENGTH_SHORT).show();
+
+
+
+
+                product_id = new ArrayList<>();
+                product_name = new ArrayList<>();
+                product_description = new ArrayList<>();
+                product_price = new ArrayList<>();
+                product_poid = new ArrayList<>();
+                product_category = new ArrayList<>();
+
+                storeDataInArraysByCategory("Pharmaceutique");
+
+
+                customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
+                        product_category);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+
+
+
+
+                return true;
+
+            case R.id.alimentary:
+                Toast.makeText(this, "alimentary category selected", Toast.LENGTH_SHORT).show();
+
+                product_id = new ArrayList<>();
+                product_name = new ArrayList<>();
+                product_description = new ArrayList<>();
+                product_price = new ArrayList<>();
+                product_poid = new ArrayList<>();
+                product_category = new ArrayList<>();
+
+                storeDataInArraysByCategory("Alimentaire");
+
+
+                customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
+                        product_category);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+                return true;
+
+            case R.id.tous:
+                Toast.makeText(this, "all category selected", Toast.LENGTH_SHORT).show();
+
+                product_id = new ArrayList<>();
+                product_name = new ArrayList<>();
+                product_description = new ArrayList<>();
+                product_price = new ArrayList<>();
+                product_poid = new ArrayList<>();
+                product_category = new ArrayList<>();
+
+                storeDataInArrays();
+
+
+                customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
+                        product_category);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+                return true;
+
             default:
+
                 return super.onOptionsItemSelected(item);
         }
     }
 
+
+
     void storeDataInArrays(){
         Cursor cursor = myDB.readAllData();
         if(cursor.getCount() == 0){
-            //empty_imageview.setVisibility(View.VISIBLE);
-            //no_data.setVisibility(View.VISIBLE);
+
             Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
         }else{
             while (cursor.moveToNext()){
@@ -106,8 +212,45 @@ public class MainActivity extends AppCompatActivity {
                 product_poid.add(cursor.getString(4));
                 product_category.add(cursor.getString(5));
             }
-            //empty_imageview.setVisibility(View.GONE);
-            //no_data.setVisibility(View.GONE);
+
+        }
+    }
+
+
+
+    void storeDataInArraysByCategory(String category){
+        Cursor cursor = myDB.readAllDataByCategory(category);
+        if(cursor.getCount() == 0){
+
+            Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                product_id.add(cursor.getString(0));
+                product_name.add(cursor.getString(1));
+                product_description.add(cursor.getString(2));
+                product_price.add(cursor.getString(3));
+                product_poid.add(cursor.getString(4));
+                product_category.add(cursor.getString(5));
+            }
+
+        }
+    }
+
+    void storeSearchDataInArrays(String name){
+        Cursor cursor = myDB.searchProduct(name);
+        if(cursor.getCount() == 0){
+
+            Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
+        }else{
+            while (cursor.moveToNext()){
+                product_id.add(cursor.getString(0));
+                product_name.add(cursor.getString(1));
+                product_description.add(cursor.getString(2));
+                product_price.add(cursor.getString(3));
+                product_poid.add(cursor.getString(4));
+                product_category.add(cursor.getString(5));
+            }
+
         }
     }
 }

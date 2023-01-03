@@ -16,6 +16,7 @@ public class AddActivity extends AppCompatActivity {
     Spinner spinner;
     EditText name_input, description_input, price_input, p_input;
     Button add_button;
+    String category;
 
 
     @Override
@@ -29,7 +30,24 @@ public class AddActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        String category = spinner.getSelectedItem().toString();
+        //String category = spinner.getSelectedItem().toString();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                category =spinner.getSelectedItem().toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
 
 
         name_input = findViewById(R.id.name_input);
