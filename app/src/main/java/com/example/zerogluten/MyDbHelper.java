@@ -64,6 +64,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
         }else {
             Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, categorie, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -74,6 +75,34 @@ public class MyDbHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         if(db != null){
             cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    //get products by category pharmacy
+    Cursor readAllDataByCategory(String category){
+        String[] params = new String[]{ category };
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery("SELECT * FROM products WHERE category = ?",
+                    params);
+        }
+        return cursor;
+    }
+
+
+    //get products by category pharmacy
+    Cursor searchProduct(String name){
+        //String query = "SELECT * FROM products WHERE name=" + name ;
+        String[] params = new String[]{ name };
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            cursor = db.rawQuery("SELECT * FROM products WHERE name = ?",
+                    params);
         }
         return cursor;
     }

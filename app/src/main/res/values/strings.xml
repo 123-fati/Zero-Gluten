@@ -3,10 +3,10 @@
 
     <string-array name="categories">
         <item>
-            Pharmacy
+            Pharmaceutique
         </item>
         <item>
-            Alimentary
+            Alimentaire
         </item>
     </string-array>
 </resources>

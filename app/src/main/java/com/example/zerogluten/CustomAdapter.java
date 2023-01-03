@@ -56,6 +56,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return product_id.size();
     }
 
+
+
+
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView product_id_txt, product_description_txt, product_name_txt, product_price_txt, product_poid_txt, product_category_txt;
@@ -72,4 +75,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             mainLayout = itemView.findViewById(R.id.mainLayout);
         }
     }
+
+
 }
