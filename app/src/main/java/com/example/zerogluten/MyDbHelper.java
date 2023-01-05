@@ -3,9 +3,9 @@ package com.example.zerogluten;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,7 +38,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 COLUMN_DESC + " TEXT, " +
                 COLUMN_PRICE + " INTEGER," +
                 COLUMN_POID + " INTEGER," +
-                COLUMN_CATEGORIE+ " TEXT);";
+                COLUMN_CATEGORIE+ " TEXT,"+
+                "photo"+ " BLOB);";
         db.execSQL(query);
 
     }
@@ -49,7 +50,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addProducts(String name, String desc, int price, int poid, String categorie) {
+    void addProducts(String name, String desc, int price, int poid, String categorie, byte[] image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -58,9 +59,12 @@ public class MyDbHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PRICE, price);
         cv.put(COLUMN_POID, poid);
         cv.put(COLUMN_CATEGORIE, categorie);
+        cv.put("photo", image);
         long result = db.insert(TABLE_NAME,null, cv);
         if(result == -1){
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, categorie, Toast.LENGTH_LONG).show();
+            Log.d("cv", "addProducts: ");
 
         }else {
             Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
@@ -75,6 +79,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         Cursor cursor = null;
         if(db != null){
             cursor = db.rawQuery(query, null);
+
         }
         return cursor;
     }
@@ -95,7 +100,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
     //get products by category pharmacy
     Cursor searchProduct(String name){
-        //String query = "SELECT * FROM products WHERE name=" + name ;
+
         String[] params = new String[]{ name };
         SQLiteDatabase db = this.getReadableDatabase();
 

@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     MyDbHelper myDB;
     ArrayList<String> product_id, product_name, product_description, product_price, product_poid, product_category;
+    ArrayList<Bitmap>  product_photo;
     CustomAdapter customAdapter;
 
     @Override
@@ -71,16 +75,22 @@ public class MainActivity extends AppCompatActivity {
                 product_price = new ArrayList<>();
                 product_poid = new ArrayList<>();
                 product_category = new ArrayList<>();
+                product_photo = new ArrayList<>();
+
 
                 storeSearchDataInArrays(search_input.getText().toString().trim());
 
 
                 customAdapter = new CustomAdapter(MainActivity.this, MainActivity.this, product_id, product_name, product_description, product_price, product_poid,
-                        product_category);
+                        product_category, product_photo);
                 recyclerView.setAdapter(customAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             }
         });
+
+
+
+
 
 
         product_id = new ArrayList<>();
@@ -89,11 +99,13 @@ public class MainActivity extends AppCompatActivity {
         product_price = new ArrayList<>();
         product_poid = new ArrayList<>();
         product_category = new ArrayList<>();
+        product_photo = new ArrayList<>();
+
 
         storeDataInArrays();
 
         customAdapter = new CustomAdapter(MainActivity.this,this, product_id, product_name, product_description, product_price, product_poid,
-                product_category);
+                product_category, product_photo);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -135,12 +147,14 @@ public class MainActivity extends AppCompatActivity {
                 product_price = new ArrayList<>();
                 product_poid = new ArrayList<>();
                 product_category = new ArrayList<>();
+                product_photo = new ArrayList<>();
+
 
                 storeDataInArraysByCategory("Pharmaceutique");
 
 
                 customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
-                        product_category);
+                        product_category, product_photo);
                 recyclerView.setAdapter(customAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -159,12 +173,14 @@ public class MainActivity extends AppCompatActivity {
                 product_price = new ArrayList<>();
                 product_poid = new ArrayList<>();
                 product_category = new ArrayList<>();
+                product_photo = new ArrayList<>();
+
 
                 storeDataInArraysByCategory("Alimentaire");
 
 
                 customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
-                        product_category);
+                        product_category, product_photo);
                 recyclerView.setAdapter(customAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -179,12 +195,14 @@ public class MainActivity extends AppCompatActivity {
                 product_price = new ArrayList<>();
                 product_poid = new ArrayList<>();
                 product_category = new ArrayList<>();
+                product_photo = new ArrayList<>();
+
 
                 storeDataInArrays();
 
 
                 customAdapter = new CustomAdapter(MainActivity.this, this, product_id, product_name, product_description, product_price, product_poid,
-                        product_category);
+                        product_category, product_photo);
                 recyclerView.setAdapter(customAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -211,6 +229,14 @@ public class MainActivity extends AppCompatActivity {
                 product_price.add(cursor.getString(3));
                 product_poid.add(cursor.getString(4));
                 product_category.add(cursor.getString(5));
+
+                byte[] imageByteArray = cursor.getBlob(6);
+
+
+                // Decode the byte array into a Bitmap object
+                Bitmap image = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+                product_photo.add(image);
+
             }
 
         }
@@ -231,6 +257,13 @@ public class MainActivity extends AppCompatActivity {
                 product_price.add(cursor.getString(3));
                 product_poid.add(cursor.getString(4));
                 product_category.add(cursor.getString(5));
+
+                byte[] imageByteArray = cursor.getBlob(6);
+
+
+                // Decode the byte array into a Bitmap object
+                Bitmap image = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+                product_photo.add(image);
             }
 
         }
@@ -249,6 +282,13 @@ public class MainActivity extends AppCompatActivity {
                 product_price.add(cursor.getString(3));
                 product_poid.add(cursor.getString(4));
                 product_category.add(cursor.getString(5));
+
+                byte[] imageByteArray = cursor.getBlob(6);
+
+
+                // Decode the byte array into a Bitmap object
+                Bitmap image = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+                product_photo.add(image);
             }
 
         }
